@@ -16,19 +16,19 @@ Mentor: dane ahn
 
 ### Step
 
-* [ ] 1. ES 구동
+- [ ] 1. ES 구동
   
-* [ ] 2. ES 인덱싱
+- [ ] 2. ES 인덱싱
   
-* [ ] 3. ES Query
+- [ ] 3. ES Query
   
-* [ ] 4. GPT API wraping
+- [ ] 4. GPT API wraping
   
-* [ ] 5. Fast API로 API 생성
+- [ ] 5. Fast API로 API 생성
   
-* [ ] 6. 위 과정 자동화
+- [ ] 6. 위 과정 자동화
   
-* [ ] 7. wrap up
+- [ ] 7. wrap up
 <br>
 
 
