@@ -6,7 +6,7 @@
 
 team_name: 2게 되조?
 
-Member: HoRi0506, sky4181, Kate Lee
+Member: HoRi0506, kwanggyu99, Kate Lee
 
 Duration: 23/4/28 - 23/6/22
 
