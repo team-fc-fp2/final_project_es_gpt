@@ -1,0 +1,139 @@
+version: '3.1'
+services:
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+
+    links:
+      - mongo
+      - redis
+      - elasticsearch
+    volumes:
+      - ./volume/crawler-logs:/server/logs/
+    environment:
+      - NUM_CONCURRENT=50
+      - LOGGING_LEVEL=20
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - ./volume/mongo-data:/data/db
+    ports:
+      - 27017:27017
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - ./volume/redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - esdata1:/usr/local/lib/docker/elasticsearch/data
+      - ./volume/elasticsearch-logs:/usr/share/elasticsearch/logs
+        #- /home/kate_lee/elasticsearch-logs:/usr/share/elasticsearch/logs
+      - ./check_cluster_connection.py:/app/check_cluster_connection.py
+        #command: >
+      #bash -c "mkdir -p logs && chmod 777 logs && /usr/local/bin/docker-entrypoint.sh"
+      #bash -c "mkdir -p logs && chown -R 1000:1000 logs && /usr/local/bin/docker-entrypoint.sh"
+    command: bash -c "mkdir -p logs && chmod 777 logs && exec /usr/local/bin/docker-entrypoint.sh"
+    networks:
+      - elasticsearch
+
+networks:
+  elasticsearch:
+    driver: bridge
+
+volumes:
+  esdata1:
+kate_lee@WIN-BVAVLDD2DQS:~$ cat docker-compose.yml
+version: '3.1'
+services:
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+
+    links:
+      - mongo
+      - redis
+      - elasticsearch
+    volumes:
+      - ./volume/crawler-logs:/server/logs/
+    environment:
+      - NUM_CONCURRENT=50
+      - LOGGING_LEVEL=20
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - ./volume/mongo-data:/data/db
+    ports:
+      - 27017:27017
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - ./volume/redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - esdata1:/usr/local/lib/docker/elasticsearch/data
+      - ./volume/elasticsearch-logs:/usr/share/elasticsearch/logs
+        #- /home/kate_lee/elasticsearch-logs:/usr/share/elasticsearch/logs
+      - ./check_cluster_connection.py:/app/check_cluster_connection.py
+        #command: >
+      #bash -c "mkdir -p logs && chmod 777 logs && /usr/local/bin/docker-entrypoint.sh"
+      #bash -c "mkdir -p logs && chown -R 1000:1000 logs && /usr/local/bin/docker-entrypoint.sh"
+    command: bash -c "mkdir -p logs && chmod 777 logs && exec /usr/local/bin/docker-entrypoint.sh"
+    networks:
+      - elasticsearch
+
+networks:
+  elasticsearch:
+    driver: bridge
+
+volumes:
+  esdata1:
